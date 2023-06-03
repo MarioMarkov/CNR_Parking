@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+torch = "==0.4.1"
+torchvision = "==0.2.1"
+matplotlib = "==3.2.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

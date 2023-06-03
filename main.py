@@ -12,7 +12,7 @@ from torchvision import transforms
 parser = argparse.ArgumentParser("Set parking lot occupancy detection project parameters", add_help=False)
 
 parser.add_argument('--epochs', type=int, default=18, help="rounds of training")
-parser.add_argument('--imshow', type=bool, default=False, help="show some training dataset")
+parser.add_argument('--imshow', type=bool, default=True, help="show some training dataset")
 parser.add_argument('--model', type=str, default='mAlexNet', help='model name')
 parser.add_argument('--path', type=str, default='', help='trained model path')
 parser.add_argument('--train_img', type=str, default='CNRPark-Patches-150x150/', help="path to training set images")
@@ -20,10 +20,8 @@ parser.add_argument('--train_lab', type=str, default='splits/CNRParkAB/even.txt'
 parser.add_argument('--test_img', type=str, default='CNRPark-Patches-150x150/', help="path to test set images")
 parser.add_argument('--test_lab', type=str, default='splits/CNRParkAB/odd.txt', help="path to test set labels")
 
-parser.add_argument("--device", default="cuda", help="device used")
+parser.add_argument("--device", default="mps", help="device used")
 args = parser.parse_args()
-
-
 
 def train(epoch, img_path, target_path, transform, net, criterion, device):
     train_dataset = Data(img_path, target_path, transform)
@@ -86,7 +84,7 @@ def test(img_path, target_path, transform, net, device):
     return (correct/total)
 
 def main():
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = "mps"
     transform = transforms.Compose([
         transforms.Resize(256),
         transforms.RandomResizedCrop(224),

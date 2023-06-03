@@ -4,7 +4,7 @@ import torchvision
 
 def imshow(train_loader):
     dataiter = iter(train_loader)
-    images, labels = dataiter.next()
+    images, labels = next(dataiter)
     img = torchvision.utils.make_grid(images)
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
