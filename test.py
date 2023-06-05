@@ -39,24 +39,23 @@ img_path = "prediction_images/"
 target_path = "splits/CNRParkAB/dummy.txt"
 
 # New dimensions for resizing
-new_width = 150
-new_height = 150
+# new_width = 150
+# new_height = 150
 
-#Iterate over the images in the directory
-for filename in os.listdir(img_path):
-    if filename.endswith(".jpg") or filename.endswith(".png"):
-        # Read the image
-        image_path = os.path.join(img_path, filename)
-        image = cv2.imread(image_path)
-        print(type(image))
-        # Resize the image
-        resized_image = cv2.resize(image, (new_width, new_height))
+# #Iterate over the images in the directory
+# for filename in os.listdir(img_path):
+#     if filename.endswith(".jpg") or filename.endswith(".png"):
+#         # Read the image
+#         image_path = os.path.join(img_path, filename)
+#         image = cv2.imread(image_path)
+#         # Resize the image
+#         resized_image = cv2.resize(image, (new_width, new_height))
         
-        output_path = os.path.join(img_path, filename)
-        cv2.imwrite(output_path, resized_image)
+#         output_path = os.path.join(img_path, filename)
+#         cv2.imwrite(output_path, resized_image)
         
 test_dataset = Data(img_path, target_path, transform)
-test_loader = DataLoader(test_dataset, batch_size=2, shuffle=False, \
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, \
                         num_workers=0, collate_fn=collate_fn)
 
 
@@ -73,11 +72,11 @@ with torch.no_grad():
             #image_data = np.transpose(images[0], (1, 2, 0))
             # plt.imshow(image_data)
             # plt.show()
-            print("Label: " ,labels)
+            print("Label: " ,int(labels[0]))
 
             # # labels = labels.to(device)
             outputs = net(images)
             _, predicted = torch.max(outputs.data, 1)
-            print("Predicted: ", predicted)
+            print("Predicted: ", int(predicted[0]))
 
 
