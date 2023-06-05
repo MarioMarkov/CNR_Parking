@@ -32,8 +32,9 @@ def show_image(image,image_path):
     plt.show()
     
 
-img_path = "extracted_patches/"
-predictions_path = "predicted_patches/"
+img_path = "extracted_patches2/"
+predictions_path = "predicted_patches2/"
+file_path = "predictions2.txt"
 data = DataInference(img_path,transform, target_path = None)
 data_loader = DataLoader(data, batch_size=1, shuffle=False, \
                         num_workers=0, collate_fn=collate_fn)
@@ -42,8 +43,8 @@ data_loader = DataLoader(data, batch_size=1, shuffle=False, \
 net = AlexNet()
 net.load_state_dict(torch.load("model.pth"))
 
-if os.path.exists('predictions.txt'):
-    os.remove('predictions.txt')
+if not os.path.exists(predictions_path):
+    os.makedirs(predictions_path)
 
 
 # Get the predictions for each image and write it to a file
@@ -56,7 +57,7 @@ with torch.no_grad():
             pred = int(predicted[0])
             print("Predicted: ", pred)
             
-            with open('predictions.txt', 'a') as file:
+            with open(predictions_path + file_path, 'a') as file:
                 file.write(f'{img_path[0]} {pred}\n')
             #images = images.to(device)
             #image_data = np.transpose(images[0], (1, 2, 0))
