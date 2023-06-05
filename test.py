@@ -61,7 +61,7 @@ test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, \
 
 #print(next(iter(test_loader)))
 #imshow(test_loader)
-net = mAlexNet()
+net = AlexNet()
 net.load_state_dict(torch.load("model.pth"))
 with torch.no_grad():
         for data in test_loader:

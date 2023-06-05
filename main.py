@@ -12,21 +12,24 @@ from torchvision import transforms
 parser = argparse.ArgumentParser("Set parking lot occupancy detection project parameters", add_help=False)
 
 parser.add_argument('--epochs', type=int, default=18, help="rounds of training")
-parser.add_argument('--imshow', type=bool, default=True, help="show some training dataset")
-parser.add_argument('--model', type=str, default='mAlexNet', help='model name')
+parser.add_argument('--imshow', type=bool, default=False, help="show some training dataset")
+parser.add_argument('--model', type=str, default='AlexNet', help='model name')
 parser.add_argument('--path', type=str, default='', help='trained model path')
 parser.add_argument('--train_img', type=str, default='CNRPark-Patches-150x150/', help="path to training set images")
 parser.add_argument('--train_lab', type=str, default='splits/CNRParkAB/even.txt', help="path to training set labels")
 parser.add_argument('--test_img', type=str, default='CNRPark-Patches-150x150/', help="path to test set images")
 parser.add_argument('--test_lab', type=str, default='splits/CNRParkAB/odd.txt', help="path to test set labels")
 
-parser.add_argument("--device", default="mps", help="device used")
+parser.add_argument("--device", default="cpu", help="device used")
 args = parser.parse_args()
 
 def train(epoch, img_path, target_path, transform, net, criterion, device):
+    print("Data loading ...")
     train_dataset = Data(img_path, target_path, transform)
     train_loader = DataLoader(train_dataset, batch_size=64, \
             shuffle=True, num_workers=0,drop_last=False, collate_fn=collate_fn)
+    
+    print("Training starting ...")
     for ep in range(epoch):  
         if ep >= 12:
             learning_rate = 0.0025
@@ -84,7 +87,7 @@ def test(img_path, target_path, transform, net, device):
     return (correct/total)
 
 def main():
-    device = "mps"
+    #device = "cpu"
     transform = transforms.Compose([
         transforms.Resize(256),
         transforms.RandomResizedCrop(224),
@@ -99,13 +102,13 @@ def main():
         imshow(train_loader)
 
     if args.model == 'mAlexNet':
-        net = mAlexNet().to(device)
+        net = mAlexNet().to(args.device)
     elif args.model == 'AlexNet':
-        net = AlexNet().to(device)
+        net = AlexNet().to(args.device)
 
     criterion = nn.CrossEntropyLoss()
     if args.path == '':
-        train(args.epochs, args.train_img, args.train_lab, transform, net, criterion, device)
+        train(args.epochs, args.train_img, args.train_lab, transform, net, criterion, args.device)
         PATH = './model.pth'
         torch.save(net.state_dict(), PATH)
         net.load_state_dict(torch.load(PATH))
@@ -113,7 +116,7 @@ def main():
     else:
         PATH = args.path
         net.load_state_dict(torch.load(PATH))
-    accuracy = test(args.test_img, args.test_lab, transform, net, device)
+    accuracy = test(args.test_img, args.test_lab, transform, net, args.device)
     print("\nThe accuracy of training on '{}' and testing on '{}' is {:.3f}.".format(args.train_lab.split('.')[0], args.test_lab.split('.')[0], accuracy))
 
 
