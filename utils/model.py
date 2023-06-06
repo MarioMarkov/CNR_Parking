@@ -1,5 +1,5 @@
 import torch.nn as nn
-
+import torch
 class AlexNet(nn.Module):
   def __init__(self, num_classes=2, init_weights=False):
     super().__init__()
@@ -43,6 +43,12 @@ class AlexNet(nn.Module):
           elif isinstance(m, nn.Linear):
               nn.init.normal_(m.weight, 0, 0.01)
               nn.init.constant_(m.bias, 0) 
+  def predict(self, img):
+    with torch.no_grad():
+        out = self(img)
+        _, pred = torch.max(out.data, dim = 1)
+        return int(pred[0])
+
 
 
 class mAlexNet(nn.Module):
@@ -79,3 +85,10 @@ class mAlexNet(nn.Module):
         x = self.layer5(self.layer4(x))
         m = nn.Softmax(dim=1)
         return m(x)
+    
+    def predict(self, img):
+        with torch.no_grad():
+            out = self(img)
+            _, pred = torch.max(out.data, dim = 1)
+            return int(pred[0])
+        

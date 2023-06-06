@@ -12,7 +12,6 @@ class DataInference:
         if target_path is None:
             self.img_list= [os.path.join(img_path, i) for i in os.listdir(img_path)] 
         else:
-            print(target_path)
             with open(target_path, 'r') as f:
                 lines = f.readlines()
                 self.img_list = [os.path.join(img_path, i.split()[0]) for i in lines]

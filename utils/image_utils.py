@@ -8,7 +8,7 @@ def extract_bndbox_values(file_path):
     root = tree.getroot()
     bndbox_values = {}
 
-    for obj in root.findall('object'):
+    for i, obj in enumerate(root.findall('object')):
         bndbox = obj.find('bndbox')
         name = obj.find('name').text
 
@@ -16,7 +16,7 @@ def extract_bndbox_values(file_path):
         ymin = float(bndbox.find('ymin').text)
         xmax = float(bndbox.find('xmax').text)
         ymax = float(bndbox.find('ymax').text)
-        bndbox_values[name] = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
+        bndbox_values[name + str(i)] = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
 
     return bndbox_values
 

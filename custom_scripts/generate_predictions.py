@@ -16,14 +16,14 @@ from utils.imshow import imshow
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
+
+
 transform = transforms.Compose([
     transforms.Resize(224),
     #transforms.RandomResizedCrop(224),
     transforms.ToTensor(),  # normalize to [0, 1]
     #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ]) 
-
-
 
 def show_image(image,image_path):
     image_data = np.transpose(image[0], (1, 2, 0))
@@ -32,32 +32,37 @@ def show_image(image,image_path):
     plt.show()
     
 
-img_path = "extracted_patches2/"
-predictions_path = "predicted_patches2/"
-file_path = "predictions2.txt"
+img_path = "inference/extracted_patches"
+predictions_path = "inference/predictions/predictions.txt"
+#file_path = "predictions2.txt"
+
 data = DataInference(img_path,transform, target_path = None)
 data_loader = DataLoader(data, batch_size=1, shuffle=False, \
                         num_workers=0, collate_fn=collate_fn)
 
+imgs, labels = next(iter(data_loader))
+#print(labels)
 
 net = AlexNet()
 net.load_state_dict(torch.load("model.pth"))
 
 if not os.path.exists(predictions_path):
     os.makedirs(predictions_path)
+    
 
 
 # Get the predictions for each image and write it to a file
 with torch.no_grad():
         for data, data2 in zip(data_loader,data):
             image, img_path = data
+            #print(image.size())
             #show_image(image,img_path)
             output = net(image)
             _, predicted = torch.max(output.data, 1)
             pred = int(predicted[0])
-            print("Predicted: ", pred)
+            #print("Predicted: ", pred)
             
-            with open(predictions_path + file_path, 'a') as file:
+            with open(predictions_path, 'a') as file:
                 file.write(f'{img_path[0]} {pred}\n')
             #images = images.to(device)
             #image_data = np.transpose(images[0], (1, 2, 0))

@@ -17,13 +17,9 @@ if not os.path.exists(output_dir):
     
 bndbox_values = extract_bndbox_values(xml_file)
 
-extract_patches(bndbox_values= bndbox_values,
-                full_image=full_image,
-                output_dir = output_dir)
-
-
-
-
+# extract_patches(bndbox_values= bndbox_values,
+#                 full_image=full_image,
+#                 output_dir = output_dir)
 
 
 

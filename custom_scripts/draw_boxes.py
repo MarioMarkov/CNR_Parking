@@ -19,7 +19,6 @@ print(len(image_data))
 
 # Loop over image data and draw boxes 
 for spot_name , values in image_data.items():
-    print(spot_name)
     is_busy = values["is_busy"]
     coordinates = values["coordinates"]
     xmin, ymin, xmax, ymax, = coordinates["xmin"], coordinates["ymin"], coordinates["xmax"], coordinates["ymax"]
