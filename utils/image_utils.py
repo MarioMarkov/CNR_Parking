@@ -49,15 +49,16 @@ def extract_polygon_box_values(file_path):
     for obj in root.findall('object'):
         bndbox = obj.find('bndbox')
         name = obj.find('name').text
+        polygon = obj.find('polygon')
 
-        x1 = float(bndbox.find('x1').text)
-        y1 = float(bndbox.find('y1').text)
-        x2 = float(bndbox.find('x2').text)
-        y2 = float(bndbox.find('y2').text)
-        x3 = float(bndbox.find('x3').text)
-        y3 = float(bndbox.find('y3').text)
-        x4 = float(bndbox.find('x4').text)
-        y4 = float(bndbox.find('y4').text)
+        x1 = float(polygon.find('x1').text)
+        y1 = float(polygon.find('y1').text)
+        x2 = float(polygon.find('x2').text)
+        y2 = float(polygon.find('y2').text)
+        x3 = float(polygon.find('x3').text)
+        y3 = float(polygon.find('y3').text)
+        x4 = float(polygon.find('x4').text)
+        y4 = float(polygon.find('y4').text)
 
         bndbox_values[name] = {'x1': x1, 'y1': y1, 
                                'x2': x2,'y2': y2,
@@ -191,3 +192,18 @@ def crop_rotated_box(image, cx, cy, width, height, angle):
     cropped_image = image[min_y:max_y, min_x:max_x]
 
     return cropped_image
+
+
+def extract_patches(bndbox_values: dict, full_image, output_dir: object):
+    for key in bndbox_values:
+        values = bndbox_values[key]
+        #Extract coordinates from the bounding box
+        xmin= values["xmin"]
+        ymin= values["ymin"]
+        xmax= values["xmax"]
+        ymax= values["ymax"]
+        # Crop patch for thr image
+        patch = full_image.crop((xmin, ymin, xmax, ymax))
+        image_array = np.array(patch)
+        resized_image = cv2.resize(image_array, (150, 150))
+        cv2.imwrite(f"{output_dir}{key}.jpg", resized_image)

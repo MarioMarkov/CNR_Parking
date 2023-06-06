@@ -3,53 +3,66 @@ import os
 import numpy as np
 import cv2
 from utils.image_utils import extract_bndbox_values
-from utils.image_utils import extract_rotated_box_values
-from utils.image_utils import crop_rotated_box
+from utils.image_utils import extract_patches
+
 import matplotlib.pyplot as plt 
-import math
+
 # Specify the path of the XML file
-xml_file = "parking2_id.xml"
-full_image = Image.open("parking2.jpg")
-output_dir = "extracted_patches2/"
+xml_file = "inference/annotations/parking.xml"
+full_image = Image.open("inference/images/parking.jpg")
+output_dir = "inference/extracted_patches/"
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
     
 bndbox_values = extract_bndbox_values(xml_file)
 
-for key in bndbox_values:
-    values = bndbox_values[key]
-    cropped_image = full_image.crop((values["xmin"], values["ymin"],
-                                    values["xmax"], values["ymax"]))
-    image_array = np.array(cropped_image)
-    resized_image = cv2.resize(image_array, (150, 150))
-    # plt.imshow(resized_image)
-    # plt.show()
-    cv2.imwrite(f"{output_dir}{key}.jpg", resized_image)
+extract_patches(bndbox_values= bndbox_values,
+                full_image=full_image,
+                output_dir = output_dir)
 
 
+
+
+
+
+
+
+#rotated_box_values = extract_polygon_box_values(xml_file)
+# rotated_box_values = extract_rotated_box_values(xml_file)
+
+# def crop_image(image, cx, cy, width, height, angle):
+#     # Calculate the coordinates of the corners of the rotated rectangle
+#     #((cx, cy), (width, height), angle ) = cv2.minAreaRect((cx, cy), (width, height), angle)
     
-    
-    
-    
-# Extract the bounding box values
-# bndbox_values = extract_bndbox_values(xml_file)
+#     #rect = cv2.minAreaRect(((cx, cy), (width, height), angle))
+#     box = cv2.boxPoints(((cx, cy), (width, height), angle +5))
+#     box = np.int0(box)
 
+#     # Get the minimum and maximum x and y coordinates of the rotated rectangle
+#     xmin = np.min(box[:, 0])
+#     xmax = np.max(box[:, 0])
+#     ymin = np.min(box[:, 1])
+#     ymax = np.max(box[:, 1])
 
-# for value in bndbox_values:
-#        values = rotated_box_values[key]
-#     xmin =  values["xmin"]
-    # ymin= values["ymin"]
-    # xmax= values["xmax"]
-    # ymax= values["ymax"]
-    # name = value
+#     # Crop the image based on the coordinates
+#     #cropped_image = image[ymin:ymax, xmin:xmax]
+#     patch = image.crop((xmin, ymin, xmax, ymax))
 
-#      #Extract coordinates from the bounding box
-#     # Crop patch for thr image
-#     patch = full_image.crop((xmin, ymin, xmax, ymax))
-#     image_array = np.array(patch)
+#     return patch
+
+# for key in rotated_box_values:
+#     values = rotated_box_values[key]
+#     # cropped_image = crop_image(full_image, 
+#     #                            values["x1"], values["x2"], values["y1"], values["y2"],
+#     #                                values["x3"], values["x4"], values["y3"], values["y4"], )
+#     cropped_image = crop_image(full_image,values["cx"], values["cy"], values["width"], 
+#                                values["height"], values["rot"])
+    
+#     image_array = np.array(cropped_image)
+#     # plt.imshow(image_array)
+#     # plt.show()
 #     resized_image = cv2.resize(image_array, (150, 150))
-#     cv2.imwrite(f"{output_dir}{name}.jpg", resized_image)
-#     #resized_image.save()
+#     cv2.imwrite(f"{output_dir}{key}.jpg", resized_image)
 
 
