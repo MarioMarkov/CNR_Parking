@@ -1,0 +1,4 @@
+test_car.jpg 1
+test_empty.jpg 0
+car.jpg 1
+empty.jpg 0

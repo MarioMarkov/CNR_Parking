@@ -1,0 +1,6 @@
+LABELS/
+PATCHES/
+data/LABELS/ filter=lfs diff=lfs merge=lfs -text
+data/PATCHES/ filter=lfs diff=lfs merge=lfs -text
+data/CNRPark-Patches-150x150/ filter=lfs diff=lfs merge=lfs -text
+data/splits/CNRParkAB/odd.txt filter=lfs diff=lfs merge=lfs -text
