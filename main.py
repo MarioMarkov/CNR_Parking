@@ -15,10 +15,11 @@ parser.add_argument('--epochs', type=int, default=18, help="rounds of training")
 parser.add_argument('--imshow', type=bool, default=False, help="show some training dataset")
 parser.add_argument('--model', type=str, default='AlexNet', help='model name')
 parser.add_argument('--path', type=str, default='', help='trained model path')
-parser.add_argument('--train_img', type=str, default='data/PATCHES/SUNNY/', help="path to training set images")
-parser.add_argument('--train_lab', type=str, default='data/splits/CNRPark-EXT/sunny.txt', help="path to training set labels")
-parser.add_argument('--test_img', type=str, default='data/PATCHES/SUNNY/', help="path to test set images")
-parser.add_argument('--test_lab', type=str, default='splits/CNRParkAB/test.txt', help="path to test set labels")
+parser.add_argument('--train_img', type=str, default='data/PATCHES/', help="path to training set images")
+parser.add_argument('--train_lab', type=str, default='data/LABELS/all.txt', help="path to training set labels")
+parser.add_argument('--test_img', type=str, default='data/CNRPark-Patches-150x150/', help="path to test set images")
+parser.add_argument('--test_lab', type=str, default='data/splits/CNRParkAB/odd.txt', help="path to test set labels")
+
 
 parser.add_argument("--device", default="cpu", help="device used")
 args = parser.parse_args()
@@ -109,7 +110,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     if args.path == '':
         train(args.epochs, args.train_img, args.train_lab, transform, net, criterion, args.device)
-        PATH = './model.pth'
+        PATH = './model_cnr_ext.pth'
         torch.save(net.state_dict(), PATH)
         net.load_state_dict(torch.load(PATH))
 
