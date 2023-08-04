@@ -1,4 +1,4 @@
-Download data from here: http://cnrpark.it/
+Download data from here: http://cnrpark.it/ or run get_dataset.sh
 
 # CNR training conf
 ### Training on cnr even patches 
