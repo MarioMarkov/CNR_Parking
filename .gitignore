@@ -1,5 +1,5 @@
 # Dataset
-PKLot/
+data/
 data/splits/CNRParkAB/even.txt
 *.pth
 
